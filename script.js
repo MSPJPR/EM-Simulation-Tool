@@ -1,65 +1,40 @@
-// Initialize WebGL Canvas
-const container = document.getElementById("simulation-container");
-const canvas = document.createElement("canvas");
-canvas.width = container.offsetWidth;
-canvas.height = container.offsetHeight;
-container.appendChild(canvas);
+document.getElementById('solve-btn').addEventListener('click', function() {
+  const fieldType = document.getElementById('field-type').value;
+  const boundaryCondition = document.getElementById('boundary-condition').value;
+  const gridSize = parseInt(document.getElementById('grid-size').value);
+  const timeStep = parseFloat(document.getElementById('time-step').value);
 
-const gl = canvas.getContext("webgl");
-if (!gl) {
-    alert("WebGL not supported!");
-} else {
-    console.log("WebGL initialized!");
-}
+  let solution = '';
+  let optimization = '';
 
-// Simulation parameters
-let frequency = 10; // Default frequency
-let amplitude = 50; // Default amplitude
-let time = 0;
+  // Field Solver (Placeholder for real solver logic)
+  if (fieldType === 'electrostatic') {
+    solution = `Solving Electrostatic Field with ${boundaryCondition} boundary condition on a ${gridSize}x${gridSize} grid.`;
+  } else if (fieldType === 'magnetostatic') {
+    solution = `Solving Magnetostatic Field with ${boundaryCondition} boundary condition on a ${gridSize}x${gridSize} grid.`;
+  } else if (fieldType === 'wave-equation') {
+    solution = `Solving Wave Equation with ${boundaryCondition} boundary condition on a ${gridSize}x${gridSize} grid at time step ${timeStep}.`;
+  }
 
-// Set up controls
-const frequencySlider = document.getElementById("frequency");
-const frequencyValue = document.getElementById("freq-value");
-const amplitudeSlider = document.getElementById("amplitude");
-const amplitudeValue = document.getElementById("amp-value");
+  document.getElementById('solution-output').innerText = solution;
 
-// Update frequency and amplitude based on user input
-frequencySlider.addEventListener("input", (event) => {
-    frequency = event.target.value;
-    frequencyValue.textContent = frequency;
+  // Real-time Simulation (Using D3.js for visualization)
+  const svg = d3.select('#simulation-graph').append('svg')
+    .attr('width', 400)
+    .attr('height', 400);
+
+  const simulationData = d3.range(0, gridSize).map(() => Math.random() * 100);
+
+  svg.selectAll('circle')
+    .data(simulationData)
+    .enter().append('circle')
+    .attr('cx', (d, i) => (i * 40) + 20)
+    .attr('cy', (d) => 400 - d)
+    .attr('r', 5)
+    .attr('fill', 'blue');
+
+  // Optimization (Example placeholder)
+  optimization = `Optimizing the model using Particle Swarm Optimization. Parameters adjusted for best accuracy.`;
+
+  document.getElementById('optimization-output').innerText = optimization;
 });
-
-amplitudeSlider.addEventListener("input", (event) => {
-    amplitude = event.target.value;
-    amplitudeValue.textContent = amplitude;
-});
-
-// Draw a simple sine wave to simulate electromagnetic behavior
-function drawWave() {
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.beginPath();
-    ctx.moveTo(0, canvas.height / 2);
-
-    for (let x = 0; x < canvas.width; x++) {
-        const y =
-            canvas.height / 2 +
-            amplitude * Math.sin((2 * Math.PI * frequency * (x / canvas.width)) + time);
-        ctx.lineTo(x, y);
-    }
-
-    ctx.strokeStyle = "blue";
-    ctx.lineWidth = 2;
-    ctx.stroke();
-}
-
-// Animation loop
-function animate() {
-    time += 0.05; // Adjust for wave speed
-    drawWave();
-    requestAnimationFrame(animate);
-}
-
-// Start animation
-animate();
