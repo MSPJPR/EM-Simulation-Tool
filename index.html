@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EM Simulation Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Interactive Electromagnetic Simulation</h1>
+    <div id="simulation-container"></div>
+    <div id="controls">
+        <label for="frequency">Frequency: </label>
+        <input type="range" id="frequency" min="1" max="50" value="10">
+        <span id="freq-value">10</span> Hz
+        <br>
+        <label for="amplitude">Amplitude: </label>
+        <input type="range" id="amplitude" min="1" max="100" value="50">
+        <span id="amp-value">50</span>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
